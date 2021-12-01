@@ -1,5 +1,6 @@
 import argparse
 import importlib
+import os
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -8,4 +9,8 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     module = importlib.import_module(f'{args.year}.{args.day}')
-    module.main(f'{args.year}/{args.day}/input')
+    input_file = f'{args.year}/{args.day}/input'
+    if os.path.isfile(input_file):
+        module.main(input_file)
+    else:
+        module.main()

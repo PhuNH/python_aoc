@@ -1,3 +1,6 @@
+import os
+
+
 def count_increases(depths: list, offset: int) -> int:
     increases = 0
     for index, depth in enumerate(depths):
@@ -6,7 +9,7 @@ def count_increases(depths: list, offset: int) -> int:
     return increases
 
 
-def main(input_path: str):
+def main(input_path: str = ''):
     with open(input_path) as f:
         input_lines = [int(line) for line in f.readlines()]
 
@@ -15,4 +18,8 @@ def main(input_path: str):
 
 
 if __name__ == '__main__':
-    main('./input')
+    input_file = './input'
+    if os.path.isfile(input_file):
+        main(input_file)
+    else:
+        main()
