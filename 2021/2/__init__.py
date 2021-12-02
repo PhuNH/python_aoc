@@ -1,3 +1,6 @@
+import os
+
+
 def main(input_path: str = ''):
     with open(input_path) as f:
         input_lines = f.readlines()
@@ -15,3 +18,11 @@ def main(input_path: str = ''):
             y += value
     print(x*y)
     print(x*depth)
+
+
+if __name__ == '__main__':
+    input_file = './input'
+    if os.path.isfile(input_file):
+        main(input_file)
+    else:
+        main()
