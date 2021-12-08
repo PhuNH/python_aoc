@@ -39,18 +39,18 @@ def find_digits(input_parts: list) -> list:
             group_069.append(p)
         else:
             group_235.append(p)
-    segments[0] = digits[7].difference(digits[1]).pop()
-    union_1_3 = digits[4].difference(digits[1])
-    union_0_1_5_6 = group_069[0].intersection(group_069[1]).intersection(group_069[2])
-    segments[3] = union_1_3.union(segments[0]).difference(union_0_1_5_6).pop()
-    segments[1] = union_1_3.difference(segments[3]).pop()
+    segments[0] = (digits[7] - digits[1]).pop()
+    union_1_3 = digits[4] - digits[1]
+    union_0_1_5_6 = group_069[0] & group_069[1] & group_069[2]
+    segments[3] = ((union_1_3 | set(segments[0])) - union_0_1_5_6).pop()
+    segments[1] = (union_1_3 - set(segments[3])).pop()
     digits[0] = next(filter(lambda s: segments[3] not in s, group_069))
-    union_4_6 = digits[0].difference(digits[1]).difference(segments[0], segments[1])
-    segments[4] = union_4_6.difference(union_0_1_5_6).pop()
+    union_4_6 = digits[0] - digits[1] - set(segments[0] + segments[1])
+    segments[4] = (union_4_6 - union_0_1_5_6).pop()
     digits[9] = next(filter(lambda s: segments[4] not in s, group_069))
     digits[6] = next(filter(lambda s: s != digits[0] and s != digits[9], group_069))
-    digits[3] = digits[9].difference(segments[1])
-    digits[5] = digits[6].difference(segments[4])
+    digits[3] = digits[9] - set(segments[1])
+    digits[5] = digits[6] - set(segments[4])
     digits[2] = next(filter(lambda s: s != digits[3] and s != digits[5], group_235))
     return digits
 
