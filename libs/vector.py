@@ -1,6 +1,3 @@
-import copy
-
-
 class Vector:
     def __init__(self, *elements):
         self._data = elements
@@ -27,6 +24,26 @@ class Vector:
     def adjacents(self):
         return {self.up, self.down, self.left, self.right}
 
+    @property
+    def up_right(self):
+        return Vector(self.x+1, self.y-1)
+
+    @property
+    def down_right(self):
+        return Vector(self.x+1, self.y+1)
+
+    @property
+    def down_left(self):
+        return Vector(self.x-1, self.y+1)
+
+    @property
+    def up_left(self):
+        return Vector(self.x-1, self.y-1)
+
+    @property
+    def diag_adjacents(self):
+        return {self.up, self.down, self.left, self.right, self.up_right, self.down_right, self.down_left, self.up_left}
+
     def __eq__(self, other):
         return isinstance(other, self.__class__) and self._data == other._data
 
@@ -42,18 +59,29 @@ class Area:
         self._data = data
         self.width = len(data[0])
         self.height = len(data)
+        self._adjacents = {}
+        self._diag_adjacents = {}
 
     def __getitem__(self, item):
         return self._data.__getitem__(item)
 
     def adjacents(self, point: Vector) -> set[Vector]:
-        result = copy.deepcopy(point.adjacents)
-        if point.x == 0:
-            result.remove(point.left)
-        elif point.x == self.width-1:
-            result.remove(point.right)
-        if point.y == 0:
-            result.remove(point.up)
-        elif point.y == self.height-1:
-            result.remove(point.down)
-        return result
+        if point not in self._adjacents:
+            result = point.adjacents
+            if point.x == 0:
+                result.remove(point.left)
+            elif point.x == self.width-1:
+                result.remove(point.right)
+            if point.y == 0:
+                result.remove(point.up)
+            elif point.y == self.height-1:
+                result.remove(point.down)
+            self._adjacents[point] = result
+        return self._adjacents[point]
+
+    def diag_adjacents(self, point: Vector) -> set[Vector]:
+        if point not in self._diag_adjacents:
+            result = point.diag_adjacents
+            result = set(filter(lambda p: p.x in range(self.width) and p.y in range(self.height), result))
+            self._diag_adjacents[point] = result
+        return self._diag_adjacents[point]
