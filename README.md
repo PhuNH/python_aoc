@@ -1,5 +1,5 @@
 # Python AoC
-Advent of Code 2021 in Python
+Advent of Code 2021, 2022 in Python
 
 ### Run
 At project root:
