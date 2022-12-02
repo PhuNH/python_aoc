@@ -65,6 +65,12 @@ class Area:
     def __getitem__(self, item):
         return self._data.__getitem__(item)
 
+    def at(self, coord: Vector):
+        return self._data[coord.y][coord.x]
+
+    def set_at(self, coord: Vector, value):
+        self._data[coord.y][coord.x] = value
+
     def adjacents(self, point: Vector) -> set[Vector]:
         if point not in self._adjacents:
             result = point.adjacents

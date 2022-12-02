@@ -8,7 +8,7 @@ def main(input_path: str = ''):
         area = Area([[int(h) for h in line] for line in f.read().strip().split('\n')])
 
         def is_higher_than(v: Vector):
-            return lambda m: area[m.y][m.x] > area[v.y][v.x]
+            return lambda m: area.at(m) > area.at(v)
 
         risk_sum = 0
         processing = []
@@ -33,7 +33,7 @@ def main(input_path: str = ''):
                 basin_size = 1
             else:
                 basin_size += 1
-            next_level = list(filter(lambda v: area[v.y][v.x] < 9 and v not in basin_points, higher))
+            next_level = list(filter(lambda v: area.at(v) < 9 and v not in basin_points, higher))
             basin_points = basin_points.union(next_level)
             processing.extend(next_level)
 

@@ -35,7 +35,7 @@ def update(area: Area) -> (int, bool):
     while len(new_flashes) > 0:
         for f in new_flashes:
             for neigh in area.diag_adjacents(f):
-                area[neigh.y][neigh.x] += 1
+                area.set_at(neigh, area.at(neigh) + 1)
             flashes.add(f)
         new_flashes = get_new_flashes(area, flashes)
     for y in range(area.height):
