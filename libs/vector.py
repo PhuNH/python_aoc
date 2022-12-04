@@ -1,3 +1,8 @@
+from typing import TypeVar, Generic
+
+T = TypeVar('T')
+
+
 class Vector:
     def __init__(self, *elements):
         self._data = elements
@@ -54,18 +59,18 @@ class Vector:
         return self._data.__str__()
 
 
-class Area:
-    def __init__(self, data: [[]]):
+class Area(Generic[T]):
+    def __init__(self, data: [[T]]):
         self._data = data
         self.width = len(data[0])
         self.height = len(data)
         self._adjacents = {}
         self._diag_adjacents = {}
 
-    def __getitem__(self, item):
+    def __getitem__(self, item) -> T:
         return self._data.__getitem__(item)
 
-    def at(self, coord: Vector):
+    def at(self, coord: Vector) -> T:
         return self._data[coord.y][coord.x]
 
     def set_at(self, coord: Vector, value):
