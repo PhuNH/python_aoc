@@ -9,7 +9,7 @@ class Path:
     def add_node(self, node):
         path = copy.deepcopy(self)
         path.nodes.append(node)
-        path.node_set = set(path.nodes)
+        path.node_set.add(node)
         return path
 
     def __contains__(self, item):
