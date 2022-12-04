@@ -3,8 +3,8 @@ from typing import TypeVar, Generic
 T = TypeVar('T')
 
 
-class Vector:
-    def __init__(self, *elements):
+class Vector(Generic[T]):
+    def __init__(self, *elements: T):
         self._data = elements
         self.x = elements[0]
         self.y = elements[1]
