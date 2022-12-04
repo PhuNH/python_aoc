@@ -10,15 +10,16 @@ class Risks:
         self.acc_risk = acc_risk
 
 
-def shortest_path_tree(area: Area):
+def shortest_path_tree(area: Area[Risks]):
     start = Vector(0, 0)
     end = Vector(area.width-1, area.height-1)
     q: deque[(Vector, int)] = deque()
     q.append((start, 0))
+    area.at(start).acc_risk = 0
     while len(q) > 0:
         current_node, current_acc_risk = q.popleft()
         current_node_risks = area.at(current_node)
-        if current_node != start and current_acc_risk > current_node_risks.acc_risk:
+        if current_acc_risk > current_node_risks.acc_risk:
             continue
         connected_nodes = area.adjacents(current_node)
         for n in connected_nodes:
