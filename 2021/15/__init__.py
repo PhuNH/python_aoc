@@ -1,41 +1,20 @@
 import os
-from collections import deque
+import time
 
-from libs.vector import Area, Vector
-
-
-class Risks:
-    def __init__(self, risk: int, acc_risk: int = -1):
-        self.risk = risk
-        self.acc_risk = acc_risk
-
-
-def shortest_path_tree(area: Area[Risks]):
-    start = Vector(0, 0)
-    end = Vector(area.width-1, area.height-1)
-    q: deque[(Vector, int)] = deque()
-    q.append((start, 0))
-    area.at(start).acc_risk = 0
-    while len(q) > 0:
-        current_node, current_acc_risk = q.popleft()
-        current_node_risks = area.at(current_node)
-        if current_acc_risk > current_node_risks.acc_risk:
-            continue
-        connected_nodes = area.adjacents(current_node)
-        for n in connected_nodes:
-            next_node_risks = area.at(n)
-            next_acc_risk = current_acc_risk + next_node_risks.risk
-            if next_node_risks.acc_risk == -1 or next_acc_risk < next_node_risks.acc_risk:
-                next_node_risks.acc_risk = next_acc_risk
-                q.append((n, next_acc_risk))
-    print(area.at(end).acc_risk)
+from libs.path import dijkstra_shortest_path_tree, my_shortest_path_tree
+from libs.vector import Vector
 
 
 def main(input_path: str = ''):
     with open(input_path) as f:
         inputs = [[int(h) for h in line] for line in f.read().strip().splitlines()]
-        area = Area([[Risks(h) for h in line] for line in inputs])
-        shortest_path_tree(area)
+        start = Vector(0, 0)
+        t0 = time.perf_counter()
+        # area = my_shortest_path_tree(inputs, start)
+        area = dijkstra_shortest_path_tree(inputs, start)
+        print(f'first part: {time.perf_counter() - t0}')
+        end = Vector(area.width-1, area.height-1)
+        print(area.at(end).tentative)
 
         for _ in range(4):
             for row in inputs:
@@ -45,8 +24,12 @@ def main(input_path: str = ''):
             for row in inputs[-area.height:]:
                 row = [(x+1) if x < 9 else 1 for x in row]
                 inputs.append(row)
-        area = Area([[Risks(h) for h in line] for line in inputs])
-        shortest_path_tree(area)
+        t0 = time.perf_counter()
+        # area = my_shortest_path_tree(inputs, start)
+        area = dijkstra_shortest_path_tree(inputs, start)
+        print(f'second part: {time.perf_counter() - t0}')
+        end = Vector(area.width-1, area.height-1)
+        print(area.at(end).tentative)
 
 
 if __name__ == '__main__':
