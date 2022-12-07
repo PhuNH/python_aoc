@@ -1,7 +1,7 @@
 from __future__ import annotations
 
+import math
 import os
-from collections import deque
 
 
 class File:
@@ -30,15 +30,10 @@ class Folder(File):
         return children_sum + (self.size if self.size <= 100000 else 0)
 
     def find_smallest_not_smaller_than(self, value):
-        q = deque([self])
-        result = self.size
-        while q:
-            f = q.popleft()
-            if value <= f.size:
-                q.extend(f.subfolders.values())
-                if f.size < result:
-                    result = f.size
-        return result
+        if self.size < value:
+            return math.inf
+        else:
+            return min(self.size, min([f.find_smallest_not_smaller_than(value) for f in self.subfolders.values()]))
 
 
 def main(input_path: str = ''):
